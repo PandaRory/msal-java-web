@@ -1,0 +1,95 @@
+@startuml
+
+title Class Relationships Diagram
+
+package com.microsoft.azure.msalwebsample {
+  class AuthFilter {
+    ~AuthHelper authHelper
+    +void doFilter()
+    -boolean containsAuthenticationCode()
+    -boolean isAccessTokenExpired()
+    -boolean isAuthenticated()
+    -void updateAuthDataUsingSilentFlow()
+    }
+
+  class AuthHelper {
+    ~static PRINCIPAL_SESSION_NAME
+    ~static TOKEN_CACHE_SESSION_ATTRIBUTE
+    ~BasicConfiguration configuration
+    +void processAuthenticationCodeRedirect()
+    +IAuthenticationResult getAuthResultBySilentFlow()
+    +void validateNonce()
+    +String getNonceClaimValueFromIdToken()
+    +void validateAuthRespMatchesAuthCodeFlow()
+    +void sendAuthRedirect()
+    +String getAuthorizationCodeUrl()
+    ~IAuthenticationResult getAuthResultByAuthCode()
+    ~ConfidentialClientApplication createClientApplication()
+    ~boolean isAuthenticationSuccessful()
+    }
+
+  class SessionManagementHelper {
+    +StateData validateState()
+    +StateData removeStateFromSession()
+    ~void eliminateExpiredStates()
+    ~void storeStateAndNonceInSession()
+    ~void storeTokenCacheInSession()
+    ~void setSessionPrincipal()
+    ~void removePrincipalFromSession()
+    ~IAuthenticationResult getAuthSessionObject()
+    }
+
+  class StateData {
+    -String nonce
+    -Date expirationDate
+    +String getNonce()
+    +Date getExpirationDate()
+    }
+
+  class BasicConfiguration {
+    -String clientId;
+    -String authority;
+    -String redirectUriSignin;
+    -String redirectUriGraph;
+    -String secretKey;
+    -String msGraphEndpointHost;
+    }
+  AuthFilter --> AuthHelper
+  AuthFilter --> SessionManagementHelper
+  AuthHelper --> SessionManagementHelper
+  SessionManagementHelper --> StateData
+  AuthHelper .. BasicConfiguration
+}
+
+package com.microsoft.aad.msal4j {
+  interface IAuthenticationResult {
+    ~String accessToken()
+    ~String idToken()
+    ~IAccount account()
+    ~String environment()
+    ~String scopes()
+    ~Date expiresOnDate()
+    }
+
+  abstract class AbstractClientApplicationBase {
+    +URL getAuthorizationRequestUrl()
+    +CompletableFuture<IAuthenticationResult> acquireToken()
+    +CompletableFuture<IAuthenticationResult> acquireTokenSilently()
+    }
+
+  class ConfidentialClientApplication {
+    +CompletableFuture<IAuthenticationResult> acquireToken()
+    }
+
+  class PublicClientApplication {
+    +CompletableFuture<IAuthenticationResult> acquireToken()
+    }
+
+  PublicClientApplication -up-|> AbstractClientApplicationBase
+  ConfidentialClientApplication -up-|> AbstractClientApplicationBase
+}
+
+AuthHelper --> ConfidentialClientApplication
+AuthHelper --> PublicClientApplication
+
+@enduml
