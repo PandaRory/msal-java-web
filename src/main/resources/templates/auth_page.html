@@ -45,7 +45,11 @@
 
     <div th:utext="${userInfo}"> </div>
 </span>
+<span th:if="${ userPhoto != null}">
+    <h3>Photo of the current user:</h3>
 
+    <img  th:src="@{'data:image/jpeg;base64,'+${userPhoto}}" />
+</span>
 
 </body>
 </html>
