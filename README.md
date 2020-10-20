@@ -1,10 +1,10 @@
 # msal-java-web
 
-+[![Actions Status](https://github.com/PandaRory/msal-java-web/workflows/build-with-maven/badge.svg)](https://github.com/PandaRory/msal-java-web/actions)
+[![Actions Status](https://github.com/PandaRory/msal-java-web/workflows/build-with-maven/badge.svg)](https://github.com/PandaRory/msal-java-web/actions)
 
-A Java web app that uses OpenId Connect to sign in/ sign out an user and to get access to the Microsoft Graph using MSAL4J.
+A Java web app that uses OpenId Connect to sign in/ sign out an user and to get access to the Microsoft Graph using [MSAL4J](https://github.com/AzureAD/microsoft-authentication-library-for-java).
 
-This project originated from [msal-java-webapp-sample](https://github.com/Azure-Samples/ms-identity-java-webapp/tree/master/msal-java-webapp-sample). 
+This project forked from [msal-java-webapp-sample](https://github.com/Azure-Samples/ms-identity-java-webapp/tree/master/msal-java-webapp-sample) on 2020/10/12. 
 
 ## Architecture
 
@@ -50,3 +50,4 @@ server.ssl.key-password=Enter_Key_Password_Here
 ## Usage
 
 The detail steps to run this sample are described in msal-java-webapp-sample [README](https://github.com/Azure-Samples/ms-identity-java-webapp/blob/master/msal-java-webapp-sample/README.md).
+
