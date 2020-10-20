@@ -16,6 +16,10 @@ The Java web application uses the Microsoft Authentication Library for Java (MSA
 
 ![Topology](./ReadmeFiles/Java-WebApp-Diagram.png)
 
+### Workflow
+
+![Workflow](./ReadmeFiles/workflow.svg)
+
 ### Class Diagram
 
 ![Class](./ReadmeFiles/class-diagram.png)
