@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +33,11 @@ class HttpClientHelper {
         }
 
         return stringBuilder.toString();
+    }
+
+    static String getBase64StringFromConn(HttpURLConnection conn) throws IOException {
+        byte[] bytes = IOUtils.toByteArray(conn.getInputStream());
+        return Base64.encodeBase64String(bytes);
     }
 
     static JSONObject processResponse(int responseCode, String response) throws JSONException {

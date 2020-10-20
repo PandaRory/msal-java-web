@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.microsoft.aad.msal4j.*;
 import com.nimbusds.jwt.JWTParser;
+import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -100,7 +101,7 @@ public class AuthPageController {
 
             try {
                 mav.addObject("userInfo", getUserInfoFromGraph(result.accessToken()));
-
+                mav.addObject("userPhoto", getUserPhotoFromGraph(result.accessToken(), result.account().username()));
                 return mav;
             } catch (Exception e) {
                 mav = new ModelAndView("error");
@@ -128,6 +129,23 @@ public class AuthPageController {
 
         JSONObject responseObject = HttpClientHelper.processResponse(responseCode, response);
         return responseObject.toString();
+    }
+
+    private String getUserPhotoFromGraph(String accessToken, String userName) throws Exception {
+        String endpoint = String.format("beta/users/%s/photo/$value", userName);
+        URL url = new URL(authHelper.getMsGraphEndpointHost() + endpoint);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+        conn.setRequestProperty("Accept", "application/json");
+
+        String response = HttpClientHelper.getBase64StringFromConn(conn);
+
+        int responseCode = conn.getResponseCode();
+        if(responseCode != HttpURLConnection.HTTP_OK) {
+            throw new IOException(response);
+        }
+        return response;
     }
 
     private void setAccountInfo(ModelAndView model, HttpServletRequest httpRequest) throws ParseException {
